@@ -41,10 +41,10 @@ K.tensorflow_backend.set_session(tf.Session(config=config))
 
 
 # dirs need subdirs as classified datas
-data_dir = '/home/ge3f/Documents/GE3F/HP_project/ColorDb/'
-train_dir = os.path.join(data_dir, "Train")
+data_dir = '/media/ge3f/Seagate5TB/HP_01_12_18/Phu_data'
+train_dir = os.path.join(data_dir, "Aug_Train")
 test_dir = os.path.join(data_dir, "Test")
-model_dir = '/home/ge3f/Documents/GE3F/HP_project/ColorDb/model'
+model_dir = '/media/ge3f/Seagate5TB/HP_01_12_18/Phu_data/Model'
 model_weight_path = os.path.join(
     model_dir, "weights-improvement-{epoch:02d}-{val_acc:.4f}-{val_loss:f}.hdf5")
 print(train_dir)
@@ -52,12 +52,12 @@ print(test_dir)
 print(model_weight_path)
 
 
-classes = ['BPAD','BPOX','BPOX0','DLAM','PART','PART0','underetch NOT reworkable','underetch reworkable']
+classes = ['01_PASS','02_FAIL']
 
-img_size = 128
+# img_size = ()
 channel = 1
-num_outputs = 3  # NOTE: unused var
-batch_size = 4
+num_outputs = 2  # NOTE: unused var
+batch_size = 8
 epochs = 50
 class_mode = 'categorical'
 color_mode = 'grayscale'
@@ -83,7 +83,7 @@ datagen_test = ImageDataGenerator(
 generator_train = datagen_train.flow_from_directory(directory=train_dir,
                                                     batch_size=batch_size,
                                                     target_size=(
-                                                        img_size, img_size),
+                                                        250, 1350),
                                                     shuffle=True,
                                                     class_mode=class_mode,
                                                     color_mode=color_mode)
@@ -91,7 +91,7 @@ generator_train = datagen_train.flow_from_directory(directory=train_dir,
 generator_test = datagen_test.flow_from_directory(directory=test_dir,
                                                   batch_size=batch_size,
                                                   target_size=(
-                                                      img_size, img_size),
+                                                      250, 1350),
                                                   color_mode=color_mode,
                                                   class_mode=class_mode,
                                                   shuffle=False)
@@ -116,13 +116,13 @@ print(type(generator_test.n))  # number of samples
 model = InceptionV3(include_top=True)
 model.summary()
 
-pretrained_path = glob.glob('/home/ge3f/Documents/GE3F/HP_project/ColorDb/model/*')
-if pretrained_path is not None:
-    lastest_model = max(pretrained_path, key=os.path.getctime)
-    print(lastest_model)
-    model.load_weights(lastest_model)
+# pretrained_path = glob.glob(model_dir)
+# if pretrained_path is not None:
+#     lastest_model = max(pretrained_path, key=os.path.getctime)
+#     print(lastest_model)
+#     model.load_weights(lastest_model)
 
-opt = keras.optimizers.Adam(lr=0.001 )
+opt = keras.optimizers.Adam(lr=0.001)
 model.compile(optimizer=opt, loss=keras.losses.categorical_crossentropy,
               metrics=['accuracy'])
 

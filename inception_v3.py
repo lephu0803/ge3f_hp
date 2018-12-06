@@ -53,12 +53,12 @@ def _obtain_input_shape(input_shape,
                     'This model usually expects 1 or 3 input channels. '
                     'However, it was passed an input_shape with ' +
                     str(input_shape[-1]) + ' input channels.')
-            default_shape = (default_size, default_size, input_shape[-1])
+            default_shape = (250, 1350, input_shape[-1])
     else:
         if data_format == 'channels_first':
             default_shape = (channels, default_size, default_size)
         else:
-            default_shape = (default_size, default_size, channels)
+            default_shape = (250,1350, channels)
     if weights == 'imagenet' and require_flatten:
         if input_shape is not None:
             if input_shape != default_shape:
@@ -159,11 +159,11 @@ def InceptionV3(include_top=True,
                 input_tensor=None,
                 input_shape=None,
                 pooling=None,
-                classes=8):  # NOTE: edit for different models
+                classes=2):  # NOTE: edit for different models
 
     # Determine proper input shape
     input_shape = _obtain_input_shape(
-        input_shape,
+        input_shape=(250,1350,1),
         default_size=256,
         min_size=139,
         data_format=K.image_data_format(),
